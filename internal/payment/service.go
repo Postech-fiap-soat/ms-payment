@@ -9,6 +9,7 @@ func NewService() domain.Service {
 	return &Service{}
 }
 
-func (s *Service) ApplyAPIPayment(payment *domain.Payment) error {
-	return nil
+func (s *Service) ApplyAPIPayment(payment *domain.Payment) (*domain.Payment, error) {
+	payment.PaidSuccessfully()
+	return payment, nil
 }

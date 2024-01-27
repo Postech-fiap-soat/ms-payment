@@ -19,15 +19,16 @@ func NewRepository(db *mongo.Client) domain.Repository {
 
 func (p *Repository) CreatePayment(ctx context.Context, payment *domain.Payment) error {
 	document := bson.D{
-		{"id", payment.ID},
+		{"id", payment.OrderId},
 		{"total_price", payment.TotalPrice},
 		{"status", payment.Status},
 		{"order", payment.Order},
 		{"client_data", payment.ClientData},
 	}
-	_, err := p.collection.InsertOne(ctx, document)
+	result, err := p.collection.InsertOne(ctx, document)
 	if err != nil {
 		return err
 	}
+	payment.ID = result.InsertedID
 	return nil
 }

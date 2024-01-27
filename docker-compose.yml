@@ -18,3 +18,15 @@ services:
       ME_CONFIG_MONGODB_ADMINUSERNAME: soatuser
       ME_CONFIG_MONGODB_ADMINPASSWORD: soatpassword
       ME_CONFIG_MONGODB_URL: mongodb://soatuser:soatpassword@mongo:27017/
+  rabbitmq:
+    image: rabbitmq:3.12.8-management
+    container_name: rabbitmq
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+      - "15692:15692"
+    environment:
+      RABBITMQ_DEFAULT_USER: soatuser
+      RABBITMQ_DEFAULT_PASS: soatpassword
+      RABBITMQ_DEFAULT_VHOST: /

@@ -1,13 +1,15 @@
 package domain
 
-import "context"
+import (
+	"context"
+)
 
 type Repository interface {
 	CreatePayment(ctx context.Context, payment *Payment) error
 }
 
 type ProdQueueRepository interface {
-	PublishPayment(payment *Payment) error
+	PublishPayment(ctx context.Context, payment *Payment) error
 }
 
 type Usecase interface {
@@ -15,11 +17,12 @@ type Usecase interface {
 }
 
 type Service interface {
-	ApplyAPIPayment(payment *Payment) error
+	ApplyAPIPayment(payment *Payment) (*Payment, error)
 }
 
 type Payment struct {
-	ID         string
+	ID         interface{}
+	OrderId    string
 	TotalPrice *int64
 	Status     int64
 	Order      Order
@@ -32,10 +35,11 @@ type Order struct {
 
 const (
 	pending = 1
+	success = 2
 )
 
 type CreatePaymentInputDTO struct {
-	ID         string                 `json:"id"`
+	OrderId    string                 `json:"order_id"`
 	TotalPrice *int64                 `json:"total_price"`
 	Order      map[string]interface{} `json:"order"`
 	ClientData map[string]interface{} `json:"client_data"`
@@ -48,11 +52,15 @@ func NewPayment(paymentDto CreatePaymentInputDTO) *Payment {
 		order.Items = items.(map[string]interface{})
 	}
 	p := Payment{
-		ID:         paymentDto.ID,
+		OrderId:    paymentDto.OrderId,
 		TotalPrice: paymentDto.TotalPrice,
 		Status:     pending,
 		Order:      order,
 		ClientData: paymentDto.ClientData,
 	}
 	return &p
+}
+
+func (p *Payment) PaidSuccessfully() {
+	p.Status = success
 }

@@ -17,7 +17,7 @@ func NewUseCase(repository domain.Repository, prodQueueRepository domain.ProdQue
 
 func (p *Usecase) CreatePayment(ctx context.Context, paymentDto domain.CreatePaymentInputDTO) error {
 	payment := domain.NewPayment(paymentDto)
-	err := p.service.ApplyAPIPayment(payment)
+	payment, err := p.service.ApplyAPIPayment(payment)
 	if err != nil {
 		return err
 	}
@@ -25,7 +25,7 @@ func (p *Usecase) CreatePayment(ctx context.Context, paymentDto domain.CreatePay
 	if err != nil {
 		return err
 	}
-	err = p.prodQueueRepository.PublishPayment(payment)
+	err = p.prodQueueRepository.PublishPayment(ctx, payment)
 	if err != nil {
 		return err
 	}
