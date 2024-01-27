@@ -9,6 +9,7 @@ require (
 )
 
 require (
+	github.com/eduardo-mior/mercadopago-sdk-go v1.3.1 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect

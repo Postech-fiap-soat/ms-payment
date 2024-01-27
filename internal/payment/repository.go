@@ -2,6 +2,7 @@ package payment
 
 import (
 	"context"
+	"fmt"
 	"github.com/Postech-fiap-soat/ms-payment/internal/domain"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -23,12 +24,12 @@ func (p *Repository) CreatePayment(ctx context.Context, payment *domain.Payment)
 		{"total_price", payment.TotalPrice},
 		{"status", payment.Status},
 		{"order", payment.Order},
-		{"client_data", payment.ClientData},
+		{"client_data", payment.Client},
 	}
 	result, err := p.collection.InsertOne(ctx, document)
 	if err != nil {
 		return err
 	}
-	payment.ID = result.InsertedID
+	payment.ID = fmt.Sprintf("%v", result.InsertedID)
 	return nil
 }

@@ -25,10 +25,11 @@ func main() {
 	queueCh, err := infra.OpenChannel(cfg)
 	repository := payment.NewRepository(clientDB)
 	prodQueueRepository := payment.NewProdQueueRepository(cfg, queueCh)
-	service := payment.NewService()
+	service := payment.NewService(cfg)
 	usecase := payment.NewUseCase(repository, prodQueueRepository, service)
 	handler := payment.NewHandler(usecase)
 	router := bunrouter.New()
 	router.POST("/payment", handler.CreatePayment)
+	log.Println("Servidor escutando na porta 8001")
 	log.Fatalf(http.ListenAndServe(":8001", router).Error())
 }

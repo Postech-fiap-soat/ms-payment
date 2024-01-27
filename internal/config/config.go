@@ -3,10 +3,12 @@ package config
 import "github.com/spf13/viper"
 
 type Config struct {
-	ConnStr        string `mapstructure:"CONN_STR"`
-	RabbitDialStr  string `mapstructure:"RABBIT_DIAL_STR"`
-	RabbitExchange string `mapstructure:"RABBIT_EXCHANGE"`
-	RabbitKey      string `mapstructure:"RABBIT_KEY"`
+	ConnStr                string `mapstructure:"CONN_STR"`
+	RabbitDialStr          string `mapstructure:"RABBIT_DIAL_STR"`
+	RabbitExchange         string `mapstructure:"RABBIT_EXCHANGE"`
+	RabbitKey              string `mapstructure:"RABBIT_KEY"`
+	MercadoPagoAccessToken string `mapstructure:"MP_ACCESS_TOKEN"`
+	WebhookNotification    string `mapstructure:"MP_WEBHOOK_NOTIFICATION"`
 }
 
 func LoadConfig(path string) (*Config, error) {

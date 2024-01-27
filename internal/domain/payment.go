@@ -21,16 +21,26 @@ type Service interface {
 }
 
 type Payment struct {
-	ID         interface{}
+	ID         string
 	OrderId    string
 	TotalPrice *int64
 	Status     int64
-	Order      Order
-	ClientData map[string]interface{} `json:"client_data"`
+	Order      *Order  `json:"order"`
+	Client     *Client `json:"client"`
+}
+
+type Client struct {
+	TypeIdentification   string
+	NumberIdentification string
+	Name                 string
+	Surname              string
+	Email                string
 }
 
 type Order struct {
-	Items map[string]interface{}
+	ItemsTitle     string
+	ItemsQuantity  float64
+	ItemsUnitPrice float64
 }
 
 const (
@@ -39,24 +49,36 @@ const (
 )
 
 type CreatePaymentInputDTO struct {
-	OrderId    string                 `json:"order_id"`
-	TotalPrice *int64                 `json:"total_price"`
-	Order      map[string]interface{} `json:"order"`
-	ClientData map[string]interface{} `json:"client_data"`
+	OrderId    string                      `json:"order_id"`
+	TotalPrice *int64                      `json:"total_price"`
+	Order      map[string]interface{}      `json:"order"`
+	ClientData CreatePaymentClientInputDTO `json:"client"`
+}
+
+type CreatePaymentClientInputDTO struct {
+	Cpf        string `json:"cpf"`
+	Name       string `json:"name"`
+	SecondName string `json:"second_name"`
+	Email      string `json:"email"`
 }
 
 func NewPayment(paymentDto CreatePaymentInputDTO) *Payment {
-	order := Order{}
-	items, ok := paymentDto.Order["items"]
-	if ok {
-		order.Items = items.(map[string]interface{})
-	}
 	p := Payment{
 		OrderId:    paymentDto.OrderId,
 		TotalPrice: paymentDto.TotalPrice,
 		Status:     pending,
-		Order:      order,
-		ClientData: paymentDto.ClientData,
+		Order: &Order{
+			ItemsTitle:     "",
+			ItemsQuantity:  1,
+			ItemsUnitPrice: float64(*paymentDto.TotalPrice),
+		},
+		Client: &Client{
+			TypeIdentification:   "CPF",
+			NumberIdentification: paymentDto.ClientData.Cpf,
+			Name:                 paymentDto.ClientData.Name,
+			Surname:              paymentDto.ClientData.SecondName,
+			Email:                paymentDto.ClientData.Email,
+		},
 	}
 	return &p
 }
