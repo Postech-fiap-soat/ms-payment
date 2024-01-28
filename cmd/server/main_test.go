@@ -50,7 +50,6 @@ var _ = ginkgo.Describe("Soat payment microsservice", func() {
 				body, err := io.ReadAll(res.Body)
 				gomega.Expect(string(body)).Should(gomega.Equal(1))
 			})
-
 		})
 	})
 })
