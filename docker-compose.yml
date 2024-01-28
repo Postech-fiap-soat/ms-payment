@@ -1,5 +1,22 @@
 version: '3.1'
 services:
+  dev:
+    build: .
+    container_name: soatmspayment
+    restart: always
+    depends_on:
+      - mongo
+      - rabbitmq
+    environment:
+      CONN_STR: mongodb://soatuser:soatpassword@mongo:27017/
+      RABBIT_DIAL_STR: amqp://soatuser:soatpassword@rabbitmq:5672/
+      RABBIT_EXCHANGE: amq.direct
+      RABBIT_KEY: soatkey
+      MP_ACCESS_TOKEN: soat-access-token
+      MP_WEBHOOK_NOTIFICATION: soat-webhook-notification
+      ENVIRONMENT: PROD
+    ports:
+      - 8001:8001
   mongo:
     image: mongo
     restart: always
@@ -30,3 +47,6 @@ services:
       RABBITMQ_DEFAULT_USER: soatuser
       RABBITMQ_DEFAULT_PASS: soatpassword
       RABBITMQ_DEFAULT_VHOST: /
+networks:
+  default:
+    driver: bridge
