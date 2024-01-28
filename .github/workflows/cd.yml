@@ -59,6 +59,9 @@ jobs:
   infra_validation:
     name: Terraform Validation and Build
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: k8s-infra
     steps:
       - uses: actions/checkout@v4
       - name: Configure AWS Credentials Action For GitHub Actions
@@ -70,8 +73,11 @@ jobs:
       - name: Setup Terraform CLI
         uses: hashicorp/setup-terraform@v2.0.2
       - run: terraform init
+        working-directory: ./k8s-infra
       - run: terraform plan
+        working-directory: ./k8s-infra
       - run: terraform apply --auto-approve
+        working-directory: ./k8s-infra
 #
 #  deploy_lambda:
 #    name: Deploy AWS Lambda
