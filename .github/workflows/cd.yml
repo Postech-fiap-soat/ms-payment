@@ -69,9 +69,9 @@ jobs:
           aws-region: us-east-1
       - name: Setup Terraform CLI
         uses: hashicorp/setup-terraform@v2.0.2
-      - run: terraform -chdir='./k8s-infra' init
-      - run: terraform -chdir='./k8s-infra' plan
-      - run: terraform -chdir='./k8s-infra' apply --auto-approve
+      - run: terraform init
+      - run: terraform plan
+      - run: terraform apply --auto-approve
 #
 #  deploy_lambda:
 #    name: Deploy AWS Lambda
