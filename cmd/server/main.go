@@ -11,11 +11,19 @@ import (
 )
 
 func main() {
+
 	ctx := context.Background()
 	cfg, err := config.LoadConfig(".")
+	if err != nil {
+		panic(err)
+	}
+	LoadAPP(ctx, cfg)
+}
+
+func LoadAPP(ctx context.Context, cfg *config.Config) {
 	clientDB, err := infra.GetDatabaseConnection(ctx, cfg)
 	if err != nil {
-		log.Fatalf(err.Error())
+		panic(err)
 	}
 	defer func() {
 		if err = clientDB.Disconnect(ctx); err != nil {
