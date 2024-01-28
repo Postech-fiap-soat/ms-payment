@@ -17,6 +17,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	log.Println("Inicializando aplicação")
 	LoadAPP(ctx, cfg)
 }
 
@@ -31,6 +32,9 @@ func LoadAPP(ctx context.Context, cfg *config.Config) {
 		}
 	}()
 	queueCh, err := infra.OpenChannel(cfg)
+	if err != nil {
+		panic(err)
+	}
 	repository := payment.NewRepository(clientDB)
 	prodQueueRepository := payment.NewProdQueueRepository(cfg, queueCh)
 	service := payment.NewService(cfg)

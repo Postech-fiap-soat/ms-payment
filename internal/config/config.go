@@ -1,6 +1,9 @@
 package config
 
-import "github.com/spf13/viper"
+import (
+	"github.com/spf13/viper"
+	"os"
+)
 
 type Config struct {
 	ConnStr                string `mapstructure:"CONN_STR"`
@@ -12,6 +15,17 @@ type Config struct {
 }
 
 func LoadConfig(path string) (*Config, error) {
+	if os.Getenv("ENVIRONMENT") == "PROD" {
+		cfg := &Config{
+			ConnStr:                os.Getenv("CONN_STR"),
+			RabbitDialStr:          os.Getenv("RABBIT_DIAL_STR"),
+			RabbitExchange:         os.Getenv("RABBIT_EXCHANGE"),
+			RabbitKey:              os.Getenv("RABBIT_KEY"),
+			MercadoPagoAccessToken: os.Getenv("MP_ACCESS_TOKEN"),
+			WebhookNotification:    os.Getenv("MP_WEBHOOK_NOTIFICATION"),
+		}
+		return cfg, nil
+	}
 	viper.SetConfigName("app_config")
 	viper.SetConfigType("env")
 	viper.AddConfigPath(path)

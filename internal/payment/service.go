@@ -1,6 +1,7 @@
 package payment
 
 import (
+	"errors"
 	"github.com/Postech-fiap-soat/ms-payment/internal/config"
 	"github.com/Postech-fiap-soat/ms-payment/internal/domain"
 	"github.com/eduardo-mior/mercadopago-sdk-go"
@@ -38,7 +39,7 @@ func (s *Service) ApplyAPIPayment(payment *domain.Payment) (*domain.Payment, err
 	if err != nil {
 		return nil, err
 	} else if mercadopagoErr != nil {
-		return nil, err
+		return nil, errors.New(mercadopagoErr.Error)
 	}
 	payment.PaidSuccessfully()
 	return payment, nil
