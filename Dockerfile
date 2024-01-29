@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY . ./
 
+RUN mkdir -p bin
+
 RUN go build -o bin cmd/server/main.go
 
 EXPOSE 8001
