@@ -2,12 +2,10 @@ FROM golang:1.21
 
 WORKDIR /app
 
-COPY . ./
+COPY . .
 
-RUN mkdir -p bin
-
-RUN go build -o bin cmd/server/main.go
+RUN go build -o payment ./cmd/server
 
 EXPOSE 8001
 
-CMD [ "bin/main"]
+CMD [ "./payment"]

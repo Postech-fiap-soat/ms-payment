@@ -5,9 +5,7 @@ import (
 	"github.com/Postech-fiap-soat/ms-payment/internal/config"
 	"github.com/Postech-fiap-soat/ms-payment/internal/infra"
 	"github.com/Postech-fiap-soat/ms-payment/internal/payment"
-	"github.com/uptrace/bunrouter"
 	"log"
-	"net/http"
 )
 
 func main() {
@@ -40,8 +38,24 @@ func LoadAPP(ctx context.Context, cfg *config.Config) {
 	service := payment.NewService(cfg)
 	usecase := payment.NewUseCase(repository, prodQueueRepository, service)
 	handler := payment.NewHandler(usecase)
-	router := bunrouter.New()
-	router.POST("/payment", handler.CreatePayment)
-	log.Println("Servidor escutando na porta 8001")
-	log.Fatalf(http.ListenAndServe(":8001", router).Error())
+
+	msgs, err := queueCh.Consume(
+		"pedido",
+		"",
+		false,
+		false,
+		false,
+		false,
+		nil,
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for {
+		msg := <-msgs
+		err = handler.CreatePayment(ctx, msg)
+		if err != nil {
+			log.Println("erro:", err)
+		}
+	}
 }

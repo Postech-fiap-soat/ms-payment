@@ -9,11 +9,11 @@ services:
       - rabbitmq
     environment:
       CONN_STR: mongodb://soatuser:soatpassword@mongo:27017/
-      RABBIT_DIAL_STR: amqp://soatuser:soatpassword@rabbitmq:5672/
+      RABBIT_DIAL_STR: amqp://guest:guest@rabbitmq:5672/
       RABBIT_EXCHANGE: amq.direct
       RABBIT_KEY: soatkey
-      MP_ACCESS_TOKEN: soat-access-token
-      MP_WEBHOOK_NOTIFICATION: soat-webhook-notification
+      MP_ACCESS_TOKEN: 'TEST-2880691368345476-012710-4ebe6a834ba55ea8fb688f53afb3fae5-1547697548'
+      MP_WEBHOOK_NOTIFICATION: 'https://webhook.site/95c442bb-780b-421f-a23c-5d6b5788edf6'
       ENVIRONMENT: PROD
     ports:
       - 8001:8001
@@ -25,7 +25,6 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: soatpassword
     ports:
       - 27017:27017
-
   mongo-express:
     image: mongo-express
     restart: always
@@ -44,9 +43,27 @@ services:
       - "15672:15672"
       - "15692:15692"
     environment:
-      RABBITMQ_DEFAULT_USER: soatuser
-      RABBITMQ_DEFAULT_PASS: soatpassword
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
       RABBITMQ_DEFAULT_VHOST: /
-networks:
-  default:
-    driver: bridge
+  ms-orders:
+    image: mateuspanda/ms-orders
+    container_name: ms-orders
+    ports:
+      - "8181:8080"
+    depends_on:
+      - db-servicos
+      - rabbitmq
+  db-servicos:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    restart: on-failure
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+    volumes:
+      - db_servicos_data:/var/lib/mysql
+      - .docker-data/migrations:/docker-entrypoint-initdb.d
+volumes:
+  db_servicos_data:

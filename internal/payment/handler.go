@@ -1,10 +1,11 @@
 package payment
 
 import (
+	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/Postech-fiap-soat/ms-payment/internal/domain"
-	"github.com/uptrace/bunrouter"
-	"io"
+	amqp "github.com/rabbitmq/amqp091-go"
 	"net/http"
 )
 
@@ -16,24 +17,19 @@ func NewHandler(usecase domain.Usecase) *Handler {
 	return &Handler{usecase: usecase}
 }
 
-func (h *Handler) CreatePayment(w http.ResponseWriter, r bunrouter.Request) error {
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		_ = NewJsendPresenter(w, http.StatusBadRequest, err.Error(), nil)
-		return err
-	}
+func (h *Handler) CreatePayment(ctx context.Context, msg amqp.Delivery) error {
+	fmt.Println("foi")
 	var paymentDto domain.CreatePaymentInputDTO
-	err = json.Unmarshal(body, &paymentDto)
+	err := json.Unmarshal(msg.Body, &paymentDto)
 	if err != nil {
-		_ = NewJsendPresenter(w, http.StatusBadRequest, err.Error(), nil)
 		return err
 	}
-	err = h.usecase.CreatePayment(r.Context(), paymentDto)
+	err = h.usecase.CreatePayment(ctx, paymentDto)
 	if err != nil {
-		_ = NewJsendPresenter(w, http.StatusInternalServerError, err.Error(), nil)
 		return err
 	}
-	return NewJsendPresenter(w, http.StatusOK, "Payment approved successfully", nil)
+	msg.Ack(true)
+	return nil
 }
 
 type JsendPaymentApproved struct {

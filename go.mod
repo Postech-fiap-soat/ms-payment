@@ -4,6 +4,7 @@ go 1.21.3
 
 require (
 	github.com/eduardo-mior/mercadopago-sdk-go v1.3.1
+	github.com/google/uuid v1.6.0
 	github.com/onsi/ginkgo/v2 v2.15.0
 	github.com/onsi/gomega v1.31.1
 	github.com/rabbitmq/amqp091-go v1.9.0

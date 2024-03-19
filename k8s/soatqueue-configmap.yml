@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: soatqueue-configmap
+data:
+  RABBITMQ_DEFAULT_USER: soatuser
+  RABBITMQ_DEFAULT_PASS: soatpassword
+  RABBITMQ_DEFAULT_VHOST: /

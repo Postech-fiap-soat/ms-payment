@@ -8,7 +8,6 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: soatpassword
     ports:
       - 27017:27017
-
   mongo-express:
     image: mongo-express
     restart: always
@@ -27,6 +26,27 @@ services:
       - "15672:15672"
       - "15692:15692"
     environment:
-      RABBITMQ_DEFAULT_USER: soatuser
-      RABBITMQ_DEFAULT_PASS: soatpassword
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
       RABBITMQ_DEFAULT_VHOST: /
+  ms-orders:
+    image: mateuspanda/ms-orders
+    container_name: ms-orders
+    ports:
+      - "8181:8080"
+    depends_on:
+      - db-servicos
+      - rabbitmq
+  db-servicos:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    restart: on-failure
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+    volumes:
+      - db_servicos_data:/var/lib/mysql
+      - .docker-data/migrations:/docker-entrypoint-initdb.d
+volumes:
+  db_servicos_data:

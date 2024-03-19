@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: soatmspayment-configmap
+data:
+  RABBIT_EXCHANGE: amq.direct
+  RABBIT_KEY: soatkey
+  ENVIRONMENT: PROD
+
+

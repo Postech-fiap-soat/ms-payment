@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: soatdb-deployment
+spec:
+  template:
+    metadata:
+      name: soatdb
+      labels:
+        app: soatdb
+    spec:
+      containers:
+        - name: soatdb
+          image: mongo
+          ports:
+            - containerPort: 27017
+          envFrom:
+            - configMapRef:
+                name: soatdb-configmap
+  selector:
+    matchLabels:
+      app: soatdb

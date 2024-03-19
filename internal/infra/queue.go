@@ -14,5 +14,6 @@ func OpenChannel(cfg *config.Config) (*amqp.Channel, error) {
 	if err != nil {
 		return nil, err
 	}
+	ch.QueueDeclare("pedido", true, false, false, false, nil)
 	return ch, nil
 }

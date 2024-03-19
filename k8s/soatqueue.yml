@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: soatqueue-deployment
+spec:
+  template:
+    metadata:
+      name: soatqueue
+      labels:
+        app: soatqueue
+    spec:
+      containers:
+        - name: soatqueue
+          image: rabbitmq:3.12.8-management
+          ports:
+            - containerPort: 5672
+          envFrom:
+            - configMapRef:
+                name: soatqueue-configmap
+  selector:
+    matchLabels:
+      app: soatqueue

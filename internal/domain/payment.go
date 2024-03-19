@@ -23,7 +23,7 @@ type Service interface {
 type Payment struct {
 	ID         string
 	OrderId    string
-	TotalPrice *int64
+	TotalPrice *float64
 	Status     int64
 	Order      *Order  `json:"order"`
 	Client     *Client `json:"client"`
@@ -49,35 +49,56 @@ const (
 )
 
 type CreatePaymentInputDTO struct {
-	OrderId    string                      `json:"order_id"`
-	TotalPrice *int64                      `json:"total_price"`
-	Order      map[string]interface{}      `json:"order"`
-	ClientData CreatePaymentClientInputDTO `json:"client"`
+	Cart          CartDTO   `json:"cart"`
+	Client        ClientDTO `json:"client"`
+	Observation   string    `json:"observation"`
+	TotalPrice    float64   `json:"totalPrice"`
+	PaymentStatus int       `json:"payment_status"`
+	OrderStatus   int       `json:"order_status"`
 }
 
-type CreatePaymentClientInputDTO struct {
-	Cpf        string `json:"cpf"`
-	Name       string `json:"name"`
-	SecondName string `json:"second_name"`
-	Email      string `json:"email"`
+type ClientDTO struct {
+	Id    int    `json:"id"`
+	Name  string `json:"name"`
+	Cpf   string `json:"cpf"`
+	Email string `json:"email"`
+}
+
+type CartDTO struct {
+	Id    int       `json:"id"`
+	Items []ItemDTO `json:"items"`
+}
+
+type ItemDTO struct {
+	Id          int     `json:"id"`
+	Count       int     `json:"count"`
+	Product     Product `json:"product"`
+	Observation string  `json:"observation"`
+}
+
+type Product struct {
+	Id          int     `json:"id"`
+	Code        string  `json:"code"`
+	Description string  `json:"description"`
+	Price       float64 `json:"price"`
+	Category    string  `json:"category"`
 }
 
 func NewPayment(paymentDto CreatePaymentInputDTO) *Payment {
 	p := Payment{
-		OrderId:    paymentDto.OrderId,
-		TotalPrice: paymentDto.TotalPrice,
-		Status:     pending,
+		TotalPrice: &paymentDto.TotalPrice,
+		Status:     int64(paymentDto.OrderStatus),
 		Order: &Order{
 			ItemsTitle:     "",
 			ItemsQuantity:  1,
-			ItemsUnitPrice: float64(*paymentDto.TotalPrice),
+			ItemsUnitPrice: paymentDto.TotalPrice,
 		},
 		Client: &Client{
 			TypeIdentification:   "CPF",
-			NumberIdentification: paymentDto.ClientData.Cpf,
-			Name:                 paymentDto.ClientData.Name,
-			Surname:              paymentDto.ClientData.SecondName,
-			Email:                paymentDto.ClientData.Email,
+			NumberIdentification: paymentDto.Client.Cpf,
+			Name:                 paymentDto.Client.Name,
+			Surname:              paymentDto.Client.Name,
+			Email:                paymentDto.Client.Email,
 		},
 	}
 	return &p

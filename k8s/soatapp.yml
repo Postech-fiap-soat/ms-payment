@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: soatmspayment-deployment
+spec:
+  template:
+    metadata:
+      name: soatmspayment
+      labels:
+        app: soatmspayment
+    spec:
+      containers:
+      - name: soatmspayment
+        image: mateuspanda/soatmspayment:latest
+        ports: 
+          - containerPort: 8001
+        envFrom: 
+          - configMapRef:
+              name: soatmspayment-configmap
+        env:
+          - name: CONN_STR
+            valueFrom:
+              secretKeyRef:
+                name: secrets
+                key: CONN_STR
+          - name: RABBIT_DIAL_STR
+            valueFrom:
+              secretKeyRef:
+                name: secrets
+                key: RABBIT_DIAL_STR
+          - name: MP_ACCESS_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: secrets
+                key: MP_ACCESS_TOKEN
+          - name: MP_WEBHOOK_NOTIFICATION
+            valueFrom:
+              secretKeyRef:
+                name: secrets
+                key: MP_WEBHOOK_NOTIFICATION
+  replicas: 3
+  selector:
+    matchLabels:
+      app: soatmspayment
