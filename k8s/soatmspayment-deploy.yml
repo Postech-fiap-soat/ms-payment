@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: soatmspayment-deploy
+spec:
+  template:
+    metadata:
+      name: soatmspayment-deploy
+      labels:
+        app: soatmspayment-deploy
+    spec:
+      containers:
+        - name: soatmspayment
+          image: mateuspanda/soatmspayment:latest
+          ports:
+            - containerPort: 8001
+          envFrom:
+            - configMapRef:
+                name: soatmspayment-configmap
+  replicas: 3
+  selector:
+    matchLabels:
+      app: soatmspayment-deploy

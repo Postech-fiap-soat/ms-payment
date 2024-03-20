@@ -37,9 +37,9 @@ func (s *Service) ApplyAPIPayment(payment *domain.Payment) (*domain.Payment, err
 		NotificationURL: s.cfg.WebhookNotification,
 	}, s.cfg.MercadoPagoAccessToken)
 	if err != nil {
-		return nil, err
+		return payment, err
 	} else if mercadopagoErr != nil {
-		return nil, errors.New(mercadopagoErr.Error)
+		return payment, errors.New(mercadopagoErr.Error)
 	}
 	payment.PaidSuccessfully()
 	return payment, nil

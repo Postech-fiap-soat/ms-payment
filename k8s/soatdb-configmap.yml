@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: soatdb-configmap
+data:
+  MYSQL_ROOT_PASSWORD: root_password
+  MYSQL_DATABASE: pedido
+  MYSQL_USER: pedido_user
+  MYSQL_PASSWORD: Mudar123!

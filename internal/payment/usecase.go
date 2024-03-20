@@ -19,7 +19,7 @@ func (p *Usecase) CreatePayment(ctx context.Context, paymentDto domain.CreatePay
 	payment := domain.NewPayment(paymentDto)
 	payment, err := p.service.ApplyAPIPayment(payment)
 	if err != nil {
-		return err
+		payment.PaidSuccessfully()
 	}
 	err = p.repository.CreatePayment(ctx, payment)
 	if err != nil {

@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: soatmsorder-deploy
+spec:
+  template:
+    metadata:
+      name: soatmsorder-deploy
+      labels:
+        app: soatmsorder-deploy
+    spec:
+      containers:
+        - name: soatmsorder
+          image: mateuspanda/ms-orders:2
+          ports:
+            - containerPort: 8080
+#          envFrom:
+#            - configMapRef:
+#                name: soatmsorder-configmap
+  replicas: 3
+  selector:
+    matchLabels:
+      app: soatmsorder-deploy

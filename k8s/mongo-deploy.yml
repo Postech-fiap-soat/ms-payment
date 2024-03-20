@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-deployment
+spec:
+  template:
+    metadata:
+      name: mongo-deployment
+      labels:
+        app: mongo-deployment
+    spec:
+      containers:
+        - name: mongo-deployment
+          image: mongo
+          ports:
+            - containerPort: 27017
+          envFrom:
+            - configMapRef:
+                name: mongo-configmap
+  selector:
+    matchLabels:
+      app: mongo-deployment
