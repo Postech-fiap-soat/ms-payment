@@ -38,9 +38,8 @@ func LoadAPP(ctx context.Context, cfg *config.Config) {
 	service := payment.NewService(cfg)
 	usecase := payment.NewUseCase(repository, prodQueueRepository, service)
 	handler := payment.NewHandler(usecase)
-
 	msgs, err := queueCh.Consume(
-		"pedido",
+		"queue_pedidos",
 		"",
 		false,
 		false,

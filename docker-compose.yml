@@ -47,7 +47,7 @@ services:
       RABBITMQ_DEFAULT_PASS: guest
       RABBITMQ_DEFAULT_VHOST: /
   ms-orders:
-    image: mateuspanda/ms-orders
+    image: mateuspanda/ms-orders:2
     container_name: ms-orders
     ports:
       - "8181:8080"
