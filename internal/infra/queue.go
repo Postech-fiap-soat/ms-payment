@@ -17,5 +17,8 @@ func OpenChannel(cfg *config.Config) (*amqp.Channel, error) {
 	ch.ExchangeDeclare("ex_pedidos", "direct", true, false, false, false, nil)
 	ch.QueueDeclare("queue_pedidos", true, false, false, false, nil)
 	ch.QueueBind("queue_pedidos", "key_pedidos", "ex_pedidos", false, nil)
+	ch.ExchangeDeclare("ex_producao", "direct", true, false, false, false, nil)
+	ch.QueueDeclare("queue_producao", true, false, false, false, nil)
+	ch.QueueBind("queue_producao", "soatkey", "ex_producao", false, nil)
 	return ch, nil
 }

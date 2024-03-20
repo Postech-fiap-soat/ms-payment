@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: soatmspayment-configmap
+data:
+  CONN_STR: mongodb://soatuser:soatpassword@mongo:27017/
+  RABBIT_DIAL_STR: amqp://guest:guest@rabbitmq:5672/
+  RABBIT_EXCHANGE: producao
+  RABBIT_KEY: soatkey
+  MP_ACCESS_TOKEN: 'TEST-2880691368345476-012710-4ebe6a834ba55ea8fb688f53afb3fae5-1547697548'
+  MP_WEBHOOK_NOTIFICATION: 'https://webhook.site/95c442bb-780b-421f-a23c-5d6b5788edf6'
+  ENVIRONMENT: PROD
+
