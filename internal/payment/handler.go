@@ -3,7 +3,6 @@ package payment
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"github.com/Postech-fiap-soat/ms-payment/internal/domain"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"net/http"
@@ -18,7 +17,6 @@ func NewHandler(usecase domain.Usecase) *Handler {
 }
 
 func (h *Handler) CreatePayment(ctx context.Context, msg amqp.Delivery) error {
-	fmt.Println("foi")
 	var paymentDto domain.CreatePaymentInputDTO
 	err := json.Unmarshal(msg.Body, &paymentDto)
 	if err != nil {

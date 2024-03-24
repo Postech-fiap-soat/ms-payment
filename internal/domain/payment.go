@@ -21,26 +21,26 @@ type Service interface {
 }
 
 type Payment struct {
-	ID         string
-	OrderId    string
-	TotalPrice *float64
-	Status     int64
-	Order      *Order  `json:"order"`
-	Client     *Client `json:"client"`
+	ID         string   `json:"id"`
+	OrderId    int64    `json:"order_id"`
+	TotalPrice *float64 `json:"total_price"`
+	Status     int64    `json:"status"`
+	Order      *Order   `json:"order"`
+	Client     *Client  `json:"client"`
 }
 
 type Client struct {
-	TypeIdentification   string
-	NumberIdentification string
-	Name                 string
-	Surname              string
-	Email                string
+	TypeIdentification   string `json:"type_identification"`
+	NumberIdentification string `json:"number_identification"`
+	Name                 string `json:"name"`
+	Surname              string `json:"surname"`
+	Email                string `json:"email"`
 }
 
 type Order struct {
-	ItemsTitle     string
-	ItemsQuantity  float64
-	ItemsUnitPrice float64
+	ItemsTitle     string  `json:"items_title"`
+	ItemsQuantity  float64 `json:"items_quantity"`
+	ItemsUnitPrice float64 `json:"items_unit_price"`
 }
 
 const (
@@ -65,7 +65,7 @@ type ClientDTO struct {
 }
 
 type CartDTO struct {
-	Id    int       `json:"id"`
+	Id    int64     `json:"id"`
 	Items []ItemDTO `json:"items"`
 }
 
@@ -86,6 +86,7 @@ type Product struct {
 
 func NewPayment(paymentDto CreatePaymentInputDTO) *Payment {
 	p := Payment{
+		OrderId:    paymentDto.Cart.Id,
 		TotalPrice: &paymentDto.TotalPrice,
 		Status:     int64(paymentDto.OrderStatus),
 		Order: &Order{
