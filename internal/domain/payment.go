@@ -21,7 +21,7 @@ type Service interface {
 }
 
 type Payment struct {
-	ID         string   `json:"id"`
+	ID         string   `json:"-"`
 	OrderId    int64    `json:"order_id"`
 	TotalPrice *float64 `json:"total_price"`
 	Status     int64    `json:"status"`
