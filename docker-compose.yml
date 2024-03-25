@@ -75,7 +75,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: root
   ms-production:
     restart: always
-    image: mateuspanda/ms-production:1
+    image: mateuspanda/ms-production:2
     container_name: ms-production
     environment:
       ConnectionStrings_MongoConnection: "mongodb://root:root@my-mongo-production:27018"
