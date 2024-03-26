@@ -65,20 +65,12 @@ services:
     volumes:
       - db_servicos_data:/var/lib/mysql
       - .docker-data/migrations:/docker-entrypoint-initdb.d
-#  mongo-production:
-#    image: mongo:latest
-#    container_name: my-mongodb
-#    ports:
-#      - "27018:27017"
-#    environment:
-#      MONGO_INITDB_ROOT_USERNAME: root
-#      MONGO_INITDB_ROOT_PASSWORD: root
   ms-production:
     restart: always
-    image: teurybazzo/ms-prodution:latest
+    image: mateuspanda/ms-production:3
     container_name: ms-production
     environment:
-      ConnectionStrings__MongoConnection: mongodb://soatuser:soatpassword@mongo:27017/
+      ConnectionStrings__MongoConnection: "mongodb://soatuser:soatpassword@mongo:27017/"
       RabbitMqConfig__Host: "rabbitmq"
       RabbitMqConfig__Port: "5672"
       RabbitMqConfig__User: "guest"
@@ -87,7 +79,7 @@ services:
     ports:
       - "5100:80"
     depends_on:
-      - mongo
+      - mongo-production
       - rabbitmq
       - dev
 volumes:
