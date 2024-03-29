@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/Postech-fiap-soat/ms-payment/internal/domain"
 	amqp "github.com/rabbitmq/amqp091-go"
+	"log"
 	"net/http"
 )
 
@@ -22,6 +23,7 @@ func (h *Handler) CreatePayment(ctx context.Context, msg amqp.Delivery) error {
 	if err != nil {
 		return err
 	}
+	log.Println(paymentDto)
 	err = h.usecase.CreatePayment(ctx, paymentDto)
 	if err != nil {
 		return err
