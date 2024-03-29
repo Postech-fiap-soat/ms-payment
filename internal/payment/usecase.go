@@ -3,6 +3,7 @@ package payment
 import (
 	"context"
 	"github.com/Postech-fiap-soat/ms-payment/internal/domain"
+	"log"
 )
 
 type Usecase struct {
@@ -21,6 +22,7 @@ func (p *Usecase) CreatePayment(ctx context.Context, paymentDto domain.CreatePay
 	if err != nil {
 		payment.PaidSuccessfully()
 	}
+	log.Println("pagamento aprovado")
 	err = p.repository.CreatePayment(ctx, payment)
 	if err != nil {
 		return err
@@ -29,5 +31,7 @@ func (p *Usecase) CreatePayment(ctx context.Context, paymentDto domain.CreatePay
 	if err != nil {
 		return err
 	}
+
+	log.Println("pedido enviado para fila de produção")
 	return nil
 }
