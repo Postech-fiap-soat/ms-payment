@@ -22,7 +22,7 @@ func (p *Usecase) CreatePayment(ctx context.Context, paymentDto domain.CreatePay
 	if err != nil {
 		payment.PaidSuccessfully()
 	}
-	log.Println("pagamento aprovado")
+	log.Println("pagamento aprovado com sucesso")
 	err = p.repository.CreatePayment(ctx, payment)
 	if err != nil {
 		return err
